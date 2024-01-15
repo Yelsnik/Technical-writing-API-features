@@ -2,14 +2,14 @@
 
 ## Table of contents
 
-- Introduction
-- What are APIs?
-- Setting up a nestjs app
-- Configuring mongoose
-- Setting up the expense endpoints
-- Implementing filtering and sorting
-- Implementing limiting and pagination
-- Conclusion
+- [Introduction](#introduction)
+- [What are APIs?](#what-are-apis)
+- [Setting up a nestjs app](#setting-up-a-nestjs-app)
+- [Configuring MongoDB](#configuring-mongodb)
+- [Setting up the expense endpoints](#settting-up-the-expense-endpoints)
+- [Implementing filtering and sorting](#implementing-filtering-and-sorting)
+- [Implementing limiting and pagination](#implementing-limiting-and-pagination)
+- [Conclusion](#conclusion)
 
 ### Introduction
 
@@ -339,3 +339,40 @@ To implement pagination, you want to get the `page` and `limit` from the query o
     return this;
   }
 ```
+
+Once this is done, you want to call the `APIfeatures` class in your `ExpensesService` class in your expenses.service.ts file.
+Replace your `getExpenses` function with this code
+
+```
+ async getExpenses(query?: any) {
+    const features = new APIFeatures(this.expenseModel.find(), query)
+      .filter()
+      .sort()
+      .limit()
+      .pagination();
+    //Execute the query
+    const expenses = await features.mongooseQuery;
+
+    return expenses;
+  }
+```
+
+In the function, it is possible to chain all these methods in the `APIFeatures` class because each method returns the object.
+
+In your expenses.controller.ts file, your `getExpenses` function should look like this:
+
+```
+  @Get()
+  async getExpenses(@Res() response: any, @Req() request: any) {
+    const expenses = await this.expenseService.getExpenses(request.query);
+
+    return response.status(200).json({
+      message: 'success',
+      data: expenses,
+    });
+  }
+```
+
+Now run the application with `npm start:dev` and test your API features in Postman.
+
+### Conclusion
