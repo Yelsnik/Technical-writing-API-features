@@ -376,3 +376,5 @@ In your expenses.controller.ts file, your `getExpenses` function should look lik
 Now run the application with `npm start:dev` and test your API features in Postman.
 
 ### Conclusion
+
+In summary, you have learnt how to implement sorting, filtering, limiting and pagination in the context of a Nestjs application. With this knowledge, you can go ahead and implement these features in your personal projects built using Nestjs.
